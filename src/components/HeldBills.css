@@ -1,0 +1,23 @@
+.held-bills input {
+  border: 1px solid #27b4b2;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.held-bills table th,
+.held-bills table td {
+  padding: 3px 3px;
+}
+
+/* NEW: Style the filters container */
+.held-bills .filters {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.held-bills .filters > div {
+  display: flex;
+  flex-direction: column;
+}

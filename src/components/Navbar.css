@@ -1,0 +1,60 @@
+/* Navbar.css */
+
+.nav-container {
+  background-color: #218ea1ad;
+  padding: 10px 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  display:flex;
+  justify-content:first baseline;
+  gap: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 650;
+  padding: 10px 25px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar a:hover {
+  background-color: #2980b9;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.navbar a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 0%;
+  bottom: 5px;
+  left: 0;
+  background-color: #2980b9;
+  transition: width 0.3s;
+}
+
+.navbar a:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-container {
+    padding: 16px;
+  }
+}

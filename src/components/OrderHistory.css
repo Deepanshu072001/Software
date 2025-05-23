@@ -1,0 +1,143 @@
+/* OrderHistory.css */
+
+.order-history {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  animation: fadeInUp 0.6s ease;
+  background: #6F4E37;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+input, select, button {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+/* ✅ Green button before hover */
+button,
+.export-buttons button {
+  background-color: #2ecc71;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+}
+
+/* ✅ Keep green even on hover */
+button:hover,
+.export-buttons button:hover {
+  transform: scale(1.05);
+  background-color: #2ecc71;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.filter-icon {
+  font-size: 20px;
+  color: #2980b9;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.filter-icon:hover {
+  transform: rotate(20deg) scale(1.1);
+}
+
+.order-list {
+  margin-top: 20px;
+}
+
+.item-row {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  animation: slideIn 0.5s ease forwards;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.item-row:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Export button layout */
+.export-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  justify-content: flex-end;
+}
+
+
+/* Force green button style using a custom class */
+.green-button {
+  background-color: #2ecc71 !important;
+  color: white !important;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.green-button:hover {
+  transform: scale(1.05);
+  background-color: #2ecc71 !important;
+}
+
+.summary-footer {
+  margin-top: 20px;
+  padding: 16px;
+  border-top: 2px solid #eee;
+  background: #3d5f3d;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #2c3e50;
+  text-align: right;
+}
+
+
