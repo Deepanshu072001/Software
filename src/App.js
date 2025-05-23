@@ -1,7 +1,6 @@
 import React from "react";
 import './components/Navbar.css';
 import {BrowserRouter as Router,Routes,Route,Navigate,Link,useLocation} from "react-router-dom";
-
 import BillForm from "./components/Invoice";
 import AuthPage from "./components/AuthPage";
 import OrderHistory from "./components/OrderHistory";
