@@ -58,3 +58,9 @@
     padding: 16px;
   }
 }
+
+@media print {
+  .nav-container{
+    display: none !important;
+  }
+}

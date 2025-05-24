@@ -66,8 +66,9 @@ button:hover,
 }
 
 .item-row {
-  background: #f9f9f9;
+  background: #4B3621;
   border-radius: 10px;
+  border-color: #4B3621;
   padding: 16px;
   margin-bottom: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -112,32 +113,39 @@ button:hover,
 }
 
 
-/* Force green button style using a custom class */
-.green-button {
-  background-color: #2ecc71 !important;
-  color: white !important;
+/* 🔄 Dark coffee button style */
+button,
+.export-buttons button {
+  background-color: #4B3621; /* Dark coffee */
+  color: white;
   font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
 }
 
-.green-button:hover {
+/* 🔄 Dark coffee on hover */
+button:hover,
+.export-buttons button:hover {
   transform: scale(1.05);
-  background-color: #2ecc71 !important;
+  background-color: #3B2A1A; /* Slightly darker coffee on hover */
 }
-
 .summary-footer {
   margin-top: 20px;
   padding: 16px;
   border-top: 2px solid #eee;
-  background: #3d5f3d;
+  background: #3d76af;
+  color: white;
   border-radius: 8px;
   font-weight: bold;
-  color: #2c3e50;
   text-align: right;
 }
 
-
+.form-section label {
+  font-size: 18px;       /* Increase font size */
+  font-weight: bold;     /* Optional: make it bold */
+  color: whitesmoke;           /* Optional: label text color */
+  margin-bottom: 6px;    /* Add spacing between label and input */
+}

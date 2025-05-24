@@ -4,6 +4,7 @@ import Papa from 'papaparse';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import './OrderHistory.css';
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);

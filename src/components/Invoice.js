@@ -68,6 +68,7 @@ const Invoice = () => {
   const [selectedQty, setSelectedQty] = useState('');
   const [itemIdToQty, setItemIdToQty] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
+  const [discount, setDiscount] = useState(0); // flat discount amount
   const [billMeta, setBillMeta] = useState(null);
   const [existingBillId, setExistingBillId] = useState(null);
 
@@ -108,7 +109,8 @@ const Invoice = () => {
     const subtotal = filtered.reduce((acc, item) => acc + item.amount, 0);
     const sgst = subtotal * 0.025;
     const cgst = subtotal * 0.025;
-    const total = subtotal + sgst + cgst;
+    const totalBeforeDiscount = subtotal + sgst + cgst;
+    const finalTotal = totalBeforeDiscount - discount;
 
     const { data, error } = await supabase.from('customers').insert({
       name,
@@ -118,12 +120,13 @@ const Invoice = () => {
       subtotal,
       sgst,
       cgst,
-      total,
+      discount,
+      total: finalTotal,
     }).select('bill_no, bill_date');
 
     if (error) {
       console.error("Supabase error:", error);
-      alert("Error saving bill!");
+      alert("Error saving bill!" + error.message);
     } else {
       alert("Bill saved!");
       setSelectedItems(filtered);
@@ -146,7 +149,8 @@ const Invoice = () => {
   const subtotal = selectedItems.reduce((acc, item) => acc + item.amount, 0);
   const sgst = subtotal * 0.025;
   const cgst = subtotal * 0.025;
-  const grandTotal = subtotal + sgst + cgst;
+  const finalTotal = Math.max(0, subtotal + sgst + cgst - discount);
+
 
   const downloadPDF = () => {
     const element = document.querySelector(".bill-output");
@@ -210,6 +214,15 @@ const Invoice = () => {
         <div className="form-section">
           <label>Name: <input value={name} onChange={e => setName(e.target.value)} /></label>
           <label>Phone: <input value={phone} onChange={e => setPhone(e.target.value)} /></label>
+          <label>Discount (₹): 
+      <input
+        type="number"
+        value={discount}
+        onChange={(e) => setDiscount(Number(e.target.value))}
+        placeholder="Enter discount amount"
+        className="input-field"
+      />
+    </label>
         </div>
 
         <div className="form-section">
@@ -310,7 +323,9 @@ const Invoice = () => {
           <p>Sub Total: ₹{subtotal}</p>
           <p>SGST 2.5%: ₹{sgst.toFixed(2)}</p>
           <p>CGST 2.5%: ₹{cgst.toFixed(2)}</p>
-          <h2>Grand Total: ₹{grandTotal.toFixed(2)}</h2>
+          <p>Discount: ₹{discount.toFixed(2)}</p>
+          <p><strong>Total: ₹{finalTotal.toFixed(2)}</strong></p>
+          <p>Thank you for visiting MuglyCafe!</p>
           <p>Thank you!!</p>
 
           <div className="button-group no-print">

@@ -5,9 +5,9 @@ const Footer = () => {
     <footer style={{
       textAlign: 'center',
       padding: '10px 0',
-      backgroundColor: '#f5f5f5',
+      backgroundColor: 'chocolate',
       fontSize: '14px',
-      color: '#555',
+      color: '#FF573B',
       marginTop: 'auto'
     }}>
       &copy; {new Date().getFullYear()} PS PaperTech Solutions
