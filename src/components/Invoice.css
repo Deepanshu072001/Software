@@ -1,20 +1,20 @@
 
 
 .invoice {
-  max-width: 480px;
+  max-width: 550px;
   margin: auto;
   font-family: 'Courier New', Courier, monospace;
-  border: 2px solid #333;
-  padding: 20px;
-  background: #6F4E37;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 3px solid #4b4949;
+  padding: 30px;
+  background: #C28840;
+  border-radius:0lvw;
+  box-shadow: 2 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .invoice h2, .invoice h3, .invoice p {
   margin: 5px 0;
   text-align: center;
-  color:burlywood;
+  color: #5A2D0C;;
 }
 
 input, select {
@@ -30,7 +30,7 @@ input, select {
 
 input:focus, select:focus {
   outline: none;
-  border-color: #470b0b;
+  border-color: #974747;
   background-color: #5cc69c;
 }
 

@@ -57,6 +57,9 @@ const AuthPage = () => {
   return (
     <div className="auth-page-container">
       <div className="auth-container">
+         <div className="avatar-icon">
+    <i className="bi bi-person"></i>
+  </div>
         <h2>{isLogin ? "Login" : "Sign Up"}</h2>
 
         <div className="auth-toggle">

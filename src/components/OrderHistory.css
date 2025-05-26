@@ -66,7 +66,7 @@ button:hover,
 }
 
 .item-row {
-  background: #4B3621;
+  background:burlywood; /* Soft gold*/
   border-radius: 10px;
   border-color: #4B3621;
   padding: 16px;
@@ -116,9 +116,9 @@ button:hover,
 /* 🔄 Dark coffee button style */
 button,
 .export-buttons button {
-  background-color: #4B3621; /* Dark coffee */
-  color: white;
-  font-weight: 600;
+  background-color: #D4AF37; /* Rich Gold golden shade */
+  color: #556B2F;
+  font-weight: 650;
   cursor: pointer;
   transition: transform 0.2s ease;
   border: none;
@@ -136,7 +136,7 @@ button:hover,
   margin-top: 20px;
   padding: 16px;
   border-top: 2px solid #eee;
-  background: #3d76af;
+  background:burlywood;
   color: white;
   border-radius: 8px;
   font-weight: bold;
