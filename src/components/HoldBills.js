@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
-import './HeldBills.css';
+import './HoldBills.css';
 
-const HeldBills = () => {
+const HoldBills = () => {
   const [tableNo, setTableNo] = useState('');
-  const [heldBills, setHeldBills] = useState([]);
+  const [holdBills, setHoldBills] = useState([]);
   const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState('all');
   const [tableOptions, setTableOptions] = useState([]);
@@ -22,9 +22,9 @@ const HeldBills = () => {
     }
   };
 
-  const fetchHeldBills = useCallback(async () => {
+  const fetchHoldBills = useCallback(async () => {
     if (!tableNo) {
-      setHeldBills([]);
+      setHoldBills([]);
       return;
     }
 
@@ -39,10 +39,10 @@ const HeldBills = () => {
     setLoading(false);
 
     if (error) {
-      console.error("Failed to fetch held bills", error);
+      console.error("Failed to fetch hold bills", error);
       alert("Error fetching bills");
     } else {
-      setHeldBills(data);
+      setHoldBills(data);
     }
   }, [tableNo]);
 
@@ -51,8 +51,8 @@ const HeldBills = () => {
   }, []);
 
   useEffect(() => {
-    fetchHeldBills();
-  }, [fetchHeldBills]);
+    fetchHoldBills();
+  }, [fetchHoldBills]);
 
   const handleMarkAsPaid = async (billNo) => {
     const { error } = await supabase
@@ -65,11 +65,11 @@ const HeldBills = () => {
       console.error("Supabase error:", error);
     } else {
       alert('Marked as paid successfully');
-      fetchHeldBills(); 
+      fetchHoldBills(); 
     }
   };
 
-  const filteredBills = heldBills.filter((bill) => {
+  const filteredBills = holdBills.filter((bill) => {
     if (statusFilter === 'all') return true;
     if (statusFilter === 'pending') return bill.status !== 'paid';
     if (statusFilter === 'paid') return bill.status === 'paid';
@@ -77,7 +77,7 @@ const HeldBills = () => {
   });
 
   return (
-    <div className="held-bills">
+    <div className="hold-bills">
       <h2 className="text-2xl font-bold mb-4">Hold Bills by Table</h2>
 
       <div className="filters flex gap-6 mb-4">
@@ -138,47 +138,48 @@ const HeldBills = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredBills.map((bill, billIndex) => (
-                bill.items.map((item, itemIndex) => (
-                  <tr key={`${bill.bill_no}-${itemIndex}`} className="hover:bg-gray-50">
-                    {itemIndex === 0 && (
-                      <>
-                        <td className="border p-2" rowSpan={bill.items.length}>{bill.bill_no}</td>
-                        <td className="border p-2" rowSpan={bill.items.length}>{new Date(bill.bill_date).toLocaleString()}</td>
-                        <td className={`border p-2 font-semibold ${bill.status === 'paid' ? 'text-green-600' : 'text-red-600'}`} rowSpan={bill.items.length}>
-                          {bill.status}
-                        </td>
-                        <td className="border p-2" rowSpan={bill.items.length}>{bill.name}</td>
-                        <td className="border p-2" rowSpan={bill.items.length}>{bill.phone}</td>
-                        <td className="border p-2" rowSpan={bill.items.length}>{bill.table_no}</td>
-                        <td className="border p-2" rowSpan={bill.items.length}>{bill.payment_method || '-'}</td>
-                      </>
-                    )}
-                    <td className="border p-2">{item.item_name}</td>
-                    <td className="border p-2">{item.quantity}</td>
-                    <td className="border p-2">₹{item.price.toFixed(2)}</td>
-                    <td className="border p-2">₹{item.amount.toFixed(2)}</td>
-                    {itemIndex === 0 && (
-                      <>
-                        <td className="border p-2 font-bold text-right text-green-700" rowSpan={bill.items.length}>
-                          ₹{bill.total.toFixed(2)}
-                        </td>
-                        <td className="border p-2" rowSpan={bill.items.length}>
-                          {bill.status !== 'paid' && (
-                            <button
-                              onClick={() => handleMarkAsPaid(bill.bill_no)}
-                              className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                            >
-                              Mark as Paid
-                            </button>
-                          )}
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                ))
-              ))}
-            </tbody>
+  {filteredBills.map((bill, billIndex) => (
+    bill.items.map((item, itemIndex) => (
+      <tr key={`${bill.bill_no}-${itemIndex}`} className="hover:bg-gray-50">
+        {itemIndex === 0 && (
+          <>
+            <td className="border p-2" rowSpan={bill.items.length}>{bill.bill_no}</td>
+            <td className="border p-2" rowSpan={bill.items.length}>{new Date(bill.bill_date).toLocaleString()}</td>
+            <td className={`border p-2 font-semibold ${bill.status === 'paid' ? 'text-green-600' : 'text-red-600'}`} rowSpan={bill.items.length}>
+              {bill.status}
+            </td>
+            <td className="border p-2" rowSpan={bill.items.length}>{bill.name}</td>
+            <td className="border p-2" rowSpan={bill.items.length}>{bill.phone}</td>
+            <td className="border p-2" rowSpan={bill.items.length}>{bill.table_no}</td>
+            <td className="border p-2" rowSpan={bill.items.length}>{bill.payment_method || '-'}</td>
+          </>
+        )}
+        <td className="border p-2">{item.item_name}</td>
+        <td className="border p-2">{item.quantity}</td>
+        <td className="border p-2">₹{(item.price ?? 0).toFixed(2)}</td>
+        <td className="border p-2">₹{(item.amount ?? 0).toFixed(2)}</td>
+        {itemIndex === 0 && (
+          <>
+            <td className="border p-2 font-bold text-right text-green-700" rowSpan={bill.items.length}>
+              ₹{(bill.total ?? 0).toFixed(2)}
+            </td>
+            <td className="border p-2" rowSpan={bill.items.length}>
+              {bill.status !== 'paid' && (
+                <button
+                  onClick={() => handleMarkAsPaid(bill.bill_no)}
+                  className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                >
+                  Mark as Paid
+                </button>
+              )}
+            </td>
+          </>
+        )}
+      </tr>
+    ))
+  ))}
+</tbody>
+
           </table>
         </div>
       )}
@@ -186,4 +187,4 @@ const HeldBills = () => {
   );
 };
 
-export default HeldBills;
+export default HoldBills;

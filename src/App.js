@@ -5,7 +5,7 @@ import BillForm from "./components/Invoice";
 import AuthPage from "./components/AuthPage";
 import Dashboard from "./components/Dashboard";
 import OrderHistory from "./components/OrderHistory";
-import HeldBills from "./components/HeldBills";
+import HoldBills from "./components/HoldBills";
 import Report from "./components/Report";
 import Footer from "./components/Footer";
 
@@ -21,7 +21,7 @@ function AppLayout() {
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/invoice">Invoice</Link>
             <Link to="/history">Order History</Link>
-            <Link to="/held-bills">Bills On Hold</Link>
+            <Link to="/hold-bills">Bills On Hold</Link>
             <Link to="/report">Report</Link>
             <Link to="/auth">Logout</Link>
           </nav>
@@ -35,7 +35,7 @@ function AppLayout() {
           <Route path="/dashboard" element={<DashboardWrapper />} />
           <Route path="/invoice" element={<BillForm />} />
           <Route path="/history" element={<OrderHistory />} />
-          <Route path="/held-bills" element={<HeldBills />} />
+          <Route path="/hold-bills" element={<HoldBills />} />
           <Route path="/report" element={<Report />} />
         </Routes>
       </div>
@@ -51,8 +51,8 @@ function DashboardWrapper() {
   return <Dashboard onNavigate={(route) => {
     if (route === 'invoice') navigate('/invoice');
     else if (route === 'orderHistory') navigate('/history');
-    else if (route === 'heldBills') navigate('/held-bills');
-    else if (route === 'reports') navigate('/z-report');
+    else if (route === 'holdBills') navigate('/hold-bills');
+    else if (route === 'report') navigate('/report');
   }} />;
 }
 

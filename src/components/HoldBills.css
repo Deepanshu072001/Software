@@ -1,31 +1,31 @@
-.held-bills input {
+.hold-bills input {
   border: 2px solid #27b4b2;
   color: brown;
-  background-color: #978a1c;
+  background-color: hsl(54, 69%, 35%);
   padding: 10px;
   border-radius: 10px;
 }
 
-.held-bills table th,
-.held-bills table td {
+.hold-bills table th,
+.hold-bills table td {
   padding: 5px 5px;
 }
 
 /* NEW: Style the filters container */
-.held-bills .filters {
+.hold-bills .filters {
   display: flex;
   justify-content: flex-start;
   gap: 16px;
   margin-bottom: 16px;
 }
 
-.held-bills .filters > div {
+.hold-bills .filters > div {
   display: flex;
   flex-direction: column;
 }
 
-.held-bills .filters label,
-.held-bills .filters span {
+.hold-bills .filters label,
+.hold-bills .filters span {
   font-size: 18px; /* Increase to any size you prefer */
   font-weight: bold; /* Optional: makes it bolder */
   color:black; /* Optional: change text color if needed */

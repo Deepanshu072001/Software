@@ -105,7 +105,7 @@ const Dashboard = ({ onNavigate }) => {
     <div className="dashboard-container">
       <header style={{ textAlign: 'center', marginBottom: 30 }}>
         <h1>Welcome to Cafe Billing Dashboard</h1>
-        <p>{currentTime.toLocaleString()}</p>
+        <p><strong> { currentTime.toLocaleString()} </strong> </p>
       </header>
 
       <div className="summary-grid">
@@ -121,8 +121,8 @@ const Dashboard = ({ onNavigate }) => {
         {[
           { title: 'Invoice', desc: 'Create bills', icon: '🧾', route: 'invoice' },
           { title: 'Order History', desc: 'View past orders', icon: '📜', route: 'orderHistory' },
-          { title: 'Held Bills', desc: 'Resume held orders', icon: '🧊', route: 'holdBills' },
-          { title: 'Report', desc: 'Generate reports', icon: '📊', route: 'reports' },
+          { title: ' Edit Order', desc: 'View Pending / Paid Orders', icon: '🧊', route: 'holdBills' },
+          { title: 'Report', desc: 'Generate reports', icon: '📊', route: 'report' },
         ].map((card, index) => (
           <div key={index} className="card" onClick={() => onNavigate(card.route)}>
             <div className="icon-wrapper" style={{ fontSize: 40 }}>{card.icon}</div>

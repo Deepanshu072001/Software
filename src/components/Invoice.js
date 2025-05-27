@@ -176,8 +176,8 @@ const Invoice = () => {
     html2pdf().from(element).set(opt).save();
   };
 
-  const resumeHeldBill = async () => {
-    if (!tableNo) return alert("Please select a table number to resume");
+  const editOrder = async () => {
+    if (!tableNo) return alert("Please select a table number to edit the order");
 
     const { data, error } = await supabase
       .from('customers')
@@ -187,10 +187,10 @@ const Invoice = () => {
       .limit(1);
 
     if (error) {
-      console.error("Error resuming bill:", error);
-      alert("Failed to resume bill");
+      console.error("Error editing order:", error);
+      alert("Failed to edit order");
     } else if (data.length === 0) {
-      alert("No held bill found for this table");
+      alert("No hold bill found for this table");
     } else {
       const bill = data[0];
       setName(bill.name);
@@ -215,8 +215,8 @@ const Invoice = () => {
     <div className="main-content">
       <div className="invoice">
         <h2>MuglyCafe (Dehradun)</h2>
-        <p>Contact: +91-7302358896</p>
-        <p>GST: 05ABAFG6063E1AE</p>
+        <p>Contact: </p>
+        <p>GST: </p>
         <hr />
 
         <div className="no-print">
@@ -336,9 +336,9 @@ const Invoice = () => {
           <div className="button-group">
             <button onClick={generateBill}>Generate Bill</button>
             <button onClick={clearAll}>Clear</button>
-            <button onClick={resumeHeldBill}>Hold Bills</button>
+            <button onClick={editOrder}>Edit Order</button>
             <button onClick={() => navigate('/history')}>View Order History</button>
-            <button onClick={() => navigate('/held-bills')}>View Hold Bills</button>
+            <button onClick={() => navigate('/hold-bills')}>View Hold Bills</button>
           </div>
         </div>
 
