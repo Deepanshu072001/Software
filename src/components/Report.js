@@ -107,9 +107,9 @@ function ZReport() {
 
   return (
     <div className="invoice" style={{ maxWidth: 800, margin: 'auto' }}>
-      <h2>Z Report</h2>
+      <h2> Report </h2>
       <div className="form-section">
-        <label>Report Type:</label>
+        <label> Report Type:</label>
         <select value={filterType} onChange={e => setFilterType(e.target.value)}>
           <option value="daily">Daily</option>
           <option value="monthly">Monthly</option>

@@ -1,15 +1,14 @@
 import React from "react";
 import './components/Navbar.css';
-import {BrowserRouter as Router,Routes,Route,Navigate,Link,useLocation} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from "react-router-dom";
 import BillForm from "./components/Invoice";
 import AuthPage from "./components/AuthPage";
+import Dashboard from "./components/Dashboard";
 import OrderHistory from "./components/OrderHistory";
 import HeldBills from "./components/HeldBills";
-import ZReport from "./components/ZReport";
-import { Links } from "react-router-dom";
-import Footer from "./components/Footer"; // Footer import
+import Report from "./components/Report";
+import Footer from "./components/Footer";
 
-// Layout component with conditional navbar
 function AppLayout() {
   const location = useLocation();
   const hideNavbar = location.pathname === "/auth";
@@ -19,10 +18,11 @@ function AppLayout() {
       {!hideNavbar && (
         <div className="nav-container">
           <nav className="navbar">
+            <Link to="/dashboard">Dashboard</Link>
             <Link to="/invoice">Invoice</Link>
             <Link to="/history">Order History</Link>
             <Link to="/held-bills">Bills On Hold</Link>
-            <Link to="/z-report" style={{ margin: '10px', fontWeight: 'bold' }}>Z Report</Link>
+            <Link to="/report">Report</Link>
             <Link to="/auth">Logout</Link>
           </nav>
         </div>
@@ -32,17 +32,28 @@ function AppLayout() {
         <Routes>
           <Route path="/" element={<Navigate to="/auth" />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/dashboard" element={<DashboardWrapper />} />
           <Route path="/invoice" element={<BillForm />} />
           <Route path="/history" element={<OrderHistory />} />
           <Route path="/held-bills" element={<HeldBills />} />
-          <Route path="/z-report" element={<ZReport />} />
+          <Route path="/report" element={<Report />} />
         </Routes>
       </div>
 
-      {/* Always show Footer */}
       <Footer />
     </div>
   );
+}
+
+// This allows Dashboard to navigate using hooks
+function DashboardWrapper() {
+  const navigate = useNavigate();
+  return <Dashboard onNavigate={(route) => {
+    if (route === 'invoice') navigate('/invoice');
+    else if (route === 'orderHistory') navigate('/history');
+    else if (route === 'heldBills') navigate('/held-bills');
+    else if (route === 'reports') navigate('/z-report');
+  }} />;
 }
 
 function App() {
