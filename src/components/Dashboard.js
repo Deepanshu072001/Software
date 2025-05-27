@@ -104,7 +104,8 @@ const Dashboard = ({ onNavigate }) => {
   return (
     <div className="dashboard-container">
       <header style={{ textAlign: 'center', marginBottom: 30 }}>
-        <h1>Welcome to Cafe Billing Dashboard</h1>
+        <h1>Welcome to MuglyCafe Dashboard</h1>
+        <h4> @Powered by PS Paper Tech Solution</h4>
         <p><strong> { currentTime.toLocaleString()} </strong> </p>
       </header>
 
@@ -121,7 +122,7 @@ const Dashboard = ({ onNavigate }) => {
         {[
           { title: 'Invoice', desc: 'Create bills', icon: '🧾', route: 'invoice' },
           { title: 'Order History', desc: 'View past orders', icon: '📜', route: 'orderHistory' },
-          { title: ' Edit Order', desc: 'View Pending / Paid Orders', icon: '🧊', route: 'holdBills' },
+          { title: 'Edit Pending Order', desc: 'View Pending / Paid Orders', icon: '🧊', route: 'holdBills' },
           { title: 'Report', desc: 'Generate reports', icon: '📊', route: 'report' },
         ].map((card, index) => (
           <div key={index} className="card" onClick={() => onNavigate(card.route)}>
