@@ -5,6 +5,8 @@ import BillForm from "./components/Invoice";
 import AuthPage from "./components/AuthPage";
 import OrderHistory from "./components/OrderHistory";
 import HeldBills from "./components/HeldBills";
+import ZReport from "./components/ZReport";
+import { Links } from "react-router-dom";
 import Footer from "./components/Footer"; // Footer import
 
 // Layout component with conditional navbar
@@ -20,6 +22,7 @@ function AppLayout() {
             <Link to="/invoice">Invoice</Link>
             <Link to="/history">Order History</Link>
             <Link to="/held-bills">Bills On Hold</Link>
+            <Link to="/z-report" style={{ margin: '10px', fontWeight: 'bold' }}>Z Report</Link>
             <Link to="/auth">Logout</Link>
           </nav>
         </div>
@@ -32,6 +35,7 @@ function AppLayout() {
           <Route path="/invoice" element={<BillForm />} />
           <Route path="/history" element={<OrderHistory />} />
           <Route path="/held-bills" element={<HeldBills />} />
+          <Route path="/z-report" element={<ZReport />} />
         </Routes>
       </div>
 

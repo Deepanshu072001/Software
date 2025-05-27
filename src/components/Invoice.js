@@ -1,11 +1,11 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './Invoice.css';
 import * as html2pdf from 'html2pdf.js';
 
 const itemsList = [
-  { "id": 1, "name": "Espresso", "category": "Beverage", "price": 100 },
+   { "id": 1, "name": "Espresso", "category": "Beverage", "price": 100 },
   { "id": 2, "name": "Cappuccino", "category": "Beverage", "price": 130 },
   { "id": 3, "name": "Latte", "category": "Beverage", "price": 140 },
   { "id": 4, "name": "Americano", "category": "Beverage", "price": 120 },
@@ -64,13 +64,15 @@ const Invoice = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [tableNo, setTableNo] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedItemId, setSelectedItemId] = useState('');
   const [selectedQty, setSelectedQty] = useState('');
   const [itemIdToQty, setItemIdToQty] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
-  const [discount, setDiscount] = useState(0); // flat discount amount
+  const [discount, setDiscount] = useState(0);
   const [billMeta, setBillMeta] = useState(null);
   const [existingBillId, setExistingBillId] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const handleSelectItem = (e) => {
     setSelectedItemId(e.target.value);
@@ -107,10 +109,13 @@ const Invoice = () => {
     if (filtered.length === 0) return alert("Please select at least one item");
 
     const subtotal = filtered.reduce((acc, item) => acc + item.amount, 0);
-    const sgst = subtotal * 0.025;
-    const cgst = subtotal * 0.025;
-    const totalBeforeDiscount = subtotal + sgst + cgst;
-    const finalTotal = totalBeforeDiscount - discount;
+    const discountAmount = subtotal * (discount / 100);
+    const discountedSubtotal = subtotal - discountAmount;
+    const sgst = discountedSubtotal * 0.025;
+    const cgst = discountedSubtotal * 0.025;
+    const finalTotal = discountedSubtotal + sgst + cgst;
+
+    const billStatus = paymentMethod ? 'paid' : 'pending';
 
     const { data, error } = await supabase.from('customers').insert({
       name,
@@ -122,6 +127,9 @@ const Invoice = () => {
       cgst,
       discount,
       total: finalTotal,
+      payment_method: paymentMethod,
+      status: billStatus,
+      is_paid: paymentMethod ? true : false,
     }).select('bill_no, bill_date');
 
     if (error) {
@@ -141,16 +149,17 @@ const Invoice = () => {
     setItemIdToQty({});
     setSelectedItems([]);
     setSelectedItemId('');
+    setSelectedCategory('');
     setSelectedQty('');
     setBillMeta(null);
     setExistingBillId(null);
+    setPaymentMethod('');
   };
 
   const subtotal = selectedItems.reduce((acc, item) => acc + item.amount, 0);
   const sgst = subtotal * 0.025;
   const cgst = subtotal * 0.025;
   const finalTotal = Math.max(0, subtotal + sgst + cgst - discount);
-
 
   const downloadPDF = () => {
     const element = document.querySelector(".bill-output");
@@ -189,8 +198,8 @@ const Invoice = () => {
       setExistingBillId(bill.id);
       setBillMeta({ bill_no: bill.bill_no, bill_date: bill.bill_date });
       setSelectedItems(bill.items);
+      setPaymentMethod(bill.payment_method || '');
 
-      // Convert item list into ID-Qty mapping
       const qtyMap = {};
       bill.items.forEach((item) => {
         const found = itemsList.find(i => i.name === item.item_name);
@@ -205,135 +214,168 @@ const Invoice = () => {
   return (
     <div className="main-content">
       <div className="invoice">
-      <h2> MuglyCafe (Dehradun)</h2>
-      <p>Contact: +91-7302358896</p>
-      <p>GST: 05ABAFG6063E1AE</p>
-      <hr />
+        <h2>MuglyCafe (Dehradun)</h2>
+        <p>Contact: +91-7302358896</p>
+        <p>GST: 05ABAFG6063E1AE</p>
+        <hr />
 
-      <div className="no-print">
-        <div className="form-section">
-          <label>Name: <input value={name} onChange={e => setName(e.target.value)} /></label>
-          <label>Phone: <input value={phone} onChange={e => setPhone(e.target.value)} /></label>
-          <label>Discount (₹): 
-      <input
-        type="number"
-        value={discount}
-        onChange={(e) => setDiscount(Number(e.target.value))}
-        placeholder="Enter discount amount"
-        className="input-field"
-      />
-    </label>
-        </div>
-
-        <div className="form-section">
-          <h4>Select Items</h4>
-          <div className="selectors">
-            <select value={selectedItemId} onChange={handleSelectItem}>
-              <option value="">-- Choose an item --</option>
-              {itemsList.map(item => (
-                <option
-                  key={item.id}
-                  value={item.id}
-                  disabled={itemIdToQty.hasOwnProperty(item.id)}
-                >
-                  {item.name}
-                </option>
-              ))}
-            </select>
-
-            <select value={selectedQty} onChange={handleSelectQty} disabled={!selectedItemId}>
-              <option value="">-- Select Quantity --</option>
-              {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
-                <option key={num} value={num}>{num}</option>
-              ))}
-            </select>
+        <div className="no-print">
+          <div className="form-section">
+            <label>Name: <input value={name} onChange={e => setName(e.target.value)} /></label>
+            <label>Phone: <input value={phone} onChange={e => setPhone(e.target.value)} /></label>
+            <label>Discount (%):
+              <input type="number" 
+              value={discount} onChange={(e) => setDiscount(parseInt(e.target.value))}
+               placeholder="Enter discount %"
+               min= "0" 
+               max = "100"
+               inputMode='numeric'
+               style={{
+                        appearance: 'textfield',
+                        MozAppearance: 'textfield',
+                        WebkitAppearance: 'none'
+                     }}  
+               />
+            </label>
+            <label>Payment Method:
+              <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
+                <option value="">-- Select Payment Method --</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="UPI">UPI</option>
+              </select>
+            </label>
           </div>
 
-          <div className="selected-items">
-            {Object.entries(itemIdToQty).map(([id, qty]) => {
-              const item = itemsList.find(i => i.id === parseInt(id));
-              return (
-                <div key={id} className="item-row">
-                  <span>{item.name}</span>
-                  <span>
-                    Qty: {qty}
-                    <button onClick={() => {
-                      setItemIdToQty(prev => ({
-                        ...prev,
-                        [id]: prev[id] + 1
-                      }));
-                    }}>+</button>
-                    <button onClick={() => {
-                      setItemIdToQty(prev => {
-                        const newQty = prev[id] - 1;
-                        if (newQty <= 0) {
-                          const { [id]: _, ...rest } = prev;
-                          return rest;
-                        }
-                        return { ...prev, [id]: newQty };
-                      });
-                    }}>-</button>
-                  </span>
-                </div>
-              );
-            })}
+          <div className="form-section">
+            <h4>Select Items</h4>
+            <div className="selectors">
+              <select value={selectedCategory} onChange={(e) => {
+                setSelectedCategory(e.target.value);
+                setSelectedItemId('');
+              }}>
+                <option value="">-- Select Category --</option>
+                {[...new Set(itemsList.map(item => item.category))].map((cat, idx) => (
+                  <option key={idx} value={cat}>{cat}</option>
+                ))}
+              </select>
+
+              <select
+                value={selectedItemId}
+                onChange={handleSelectItem}
+                disabled={!selectedCategory}
+              >
+                <option value="">-- Select Item --</option>
+                {itemsList
+                  .filter(item => item.category === selectedCategory)
+                  .map(item => (
+                    <option
+                      key={item.id}
+                      value={item.id}
+                      disabled={itemIdToQty.hasOwnProperty(item.id)}
+                    >
+                      {item.name}
+                    </option>
+                  ))}
+              </select>
+
+              <select
+                value={selectedQty}
+                onChange={handleSelectQty}
+                disabled={!selectedItemId}
+              >
+                <option value="">-- Quantity --</option>
+                {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="selected-items">
+              {Object.entries(itemIdToQty).map(([id, qty]) => {
+                const item = itemsList.find(i => i.id === parseInt(id));
+                return (
+                  <div key={id} className="item-row">
+                    <span>{item.name}</span>
+                    <span>
+                      Qty: {qty}
+                      <button onClick={() => {
+                        setItemIdToQty(prev => ({
+                          ...prev,
+                          [id]: prev[id] + 1
+                        }));
+                      }}>+</button>
+                      <button onClick={() => {
+                        setItemIdToQty(prev => {
+                          const newQty = prev[id] - 1;
+                          if (newQty <= 0) {
+                            const { [id]: _, ...rest } = prev;
+                            return rest;
+                          }
+                          return { ...prev, [id]: newQty };
+                        });
+                      }}>-</button>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="form-section">
+            <label>Table No:
+              <select value={tableNo} onChange={e => setTableNo(e.target.value)}>
+                <option value="">-- Select Table --</option>
+                {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
+                  <option key={num} value={num}>Table {num}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="button-group">
+            <button onClick={generateBill}>Generate Bill</button>
+            <button onClick={clearAll}>Clear</button>
+            <button onClick={resumeHeldBill}>Hold Bills</button>
+            <button onClick={() => navigate('/history')}>View Order History</button>
+            <button onClick={() => navigate('/held-bills')}>View Hold Bills</button>
           </div>
         </div>
 
-        <div className="form-section">
-          <label>Table No:
-            <select value={tableNo} onChange={e => setTableNo(e.target.value)}>
-              <option value="">-- Select Table --</option>
-              {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
-                <option key={num} value={num}>Table {num}</option>
-              ))}
-            </select>
-          </label>
-        </div>
+        {selectedItems.length > 0 && (
+          <div className="bill-output">
+            <h3>Bill No: {billMeta?.bill_no || '-'}</h3>
+            <p>Date: {billMeta?.bill_date ? new Date(billMeta.bill_date).toLocaleString() : '-'}</p>
+            <p>Table No: {tableNo}</p>
+            <p>Payment Method: {paymentMethod || '-'}</p>
+            <table>
+              <thead>
+                <tr><th>Item</th><th>Qty</th><th>Price</th><th>Amount</th></tr>
+              </thead>
+              <tbody>
+                {selectedItems.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.item_name}</td>
+                    <td>{item.quantity}</td>
+                    <td>₹{item.price}</td>
+                    <td>₹{item.amount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p>Sub Total: ₹{subtotal}</p>
+            <p>SGST 2.5%: ₹{sgst.toFixed(2)}</p>
+            <p>CGST 2.5%: ₹{cgst.toFixed(2)}</p>
+            <p>Discount ({discount}%): ₹{(subtotal * (discount / 100)).toFixed(2)}</p>
+            <p><strong>Total: ₹{finalTotal.toFixed(2)}</strong></p>
+            <p>Thank you for visiting MuglyCafe!</p>
 
-        <div className="button-group">
-          <button onClick={generateBill}>Generate Bill</button>
-          <button onClick={clearAll}>Clear</button>
-          <button onClick={resumeHeldBill}>Hold Bills</button>
-          <button onClick={() => navigate('/history')}>View Order History</button>
-          <button onClick={() => navigate('/held-bills')}>View Hold Bills</button>
-        </div>
-      </div>
-
-      {selectedItems.length > 0 && (
-        <div className="bill-output">
-          <h3>Bill No: {billMeta?.bill_no || '-'}</h3>
-          <p>Date: {billMeta?.bill_date ? new Date(billMeta.bill_date).toLocaleString() : '-'}</p>
-          <p>Table No: {tableNo}</p>
-          <table>
-            <thead>
-              <tr><th>Item</th><th>Qty</th><th>Price</th><th>Amount</th></tr>
-            </thead>
-            <tbody>
-              {selectedItems.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.item_name}</td>
-                  <td>{item.quantity}</td>
-                  <td>₹{item.price}</td>
-                  <td>₹{item.amount}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <p>Sub Total: ₹{subtotal}</p>
-          <p>SGST 2.5%: ₹{sgst.toFixed(2)}</p>
-          <p>CGST 2.5%: ₹{cgst.toFixed(2)}</p>
-          <p>Discount: ₹{discount.toFixed(2)}</p>
-          <p><strong>Total: ₹{finalTotal.toFixed(2)}</strong></p>
-          <p>Thank you for visiting MuglyCafe!</p>
-          <p>Thank you!!</p>
-
-          <div className="button-group no-print">
-            <button onClick={() => window.print()}>Print Receipt</button>
-            <button onClick={downloadPDF}>Download PDF</button>
+            <div className="button-group no-print">
+              <button onClick={() => window.print()}>Print Receipt</button>
+              <button onClick={downloadPDF}>Download PDF</button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </div>
   );

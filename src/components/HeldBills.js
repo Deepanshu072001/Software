@@ -128,6 +128,7 @@ const HeldBills = () => {
                 <th className="border p-2">Name</th>
                 <th className="border p-2">Phone</th>
                 <th className="border p-2">Table No</th>
+                <th className="border p-2">Payment</th>
                 <th className="border p-2">Item</th>
                 <th className="border p-2">Qty</th>
                 <th className="border p-2">Price</th>
@@ -150,6 +151,7 @@ const HeldBills = () => {
                         <td className="border p-2" rowSpan={bill.items.length}>{bill.name}</td>
                         <td className="border p-2" rowSpan={bill.items.length}>{bill.phone}</td>
                         <td className="border p-2" rowSpan={bill.items.length}>{bill.table_no}</td>
+                        <td className="border p-2" rowSpan={bill.items.length}>{bill.payment_method || '-'}</td>
                       </>
                     )}
                     <td className="border p-2">{item.item_name}</td>

@@ -100,6 +100,7 @@ const OrderHistory = () => {
       orders.map(order => ({
         Date: new Date(order.bill_date).toLocaleDateString(),
         BillNo: order.bill_no,
+        PaymentMethod: order.payment_method || '-',
         Total: order.total
       }))
     );
@@ -162,6 +163,7 @@ const OrderHistory = () => {
               <div key={idx} className="item-row">
                 <p><strong>Date:</strong> {new Date(order.bill_date).toLocaleString()}</p>
                 <p><strong>Bill No:</strong> {order.bill_no}</p>
+                  <p><strong>Payment Method:</strong> {order.payment_method || '-'}</p>
                 {viewMode === 'detailed' && (
                   <>
                     <ul>
