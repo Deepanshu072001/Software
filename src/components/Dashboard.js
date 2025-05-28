@@ -105,8 +105,9 @@ const Dashboard = ({ onNavigate }) => {
     <div className="dashboard-container">
       <header style={{ textAlign: 'center', marginBottom: 30 }}>
         <h1>Welcome to MuglyCafe Dashboard</h1>
-        <h4> @Powered by PS Paper Tech Solution</h4>
-        <p><strong> { currentTime.toLocaleString()} </strong> </p>
+        <h2>Current Time: {currentTime.toLocaleTimeString()}</h2>
+        <h3> @Powered by PS Paper Tech Solution</h3>
+        
       </header>
 
       <div className="summary-grid">
