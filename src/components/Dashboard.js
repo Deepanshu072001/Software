@@ -107,7 +107,7 @@ const Dashboard = ({ onNavigate }) => {
         <h1>Welcome to MuglyCafe Dashboard</h1>
         <h2>Current Time: {currentTime.toLocaleTimeString()}</h2>
         <h3> @Powered by PS Paper Tech Solution</h3>
-        
+
       </header>
 
       <div className="summary-grid">

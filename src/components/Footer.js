@@ -10,7 +10,7 @@ const Footer = () => {
       color: '#FF573B',
       marginTop: 'auto'
     }}>
-      &copy; {new Date().getFullYear()} PS PaperTech Solutions
+      &copy; {new Date().getFullYear()} <h4> PS PaperTech Solutions </h4>
     </footer>
   );
 };
