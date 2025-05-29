@@ -37,7 +37,7 @@ const AuthPage = () => {
         setError("Invalid credentials or user not confirmed.");
       } else {
         setMessage("Login successful!");
-        navigate('/invoice');
+        navigate('/dashboard'); // Redirect to dashboard on successful login
       }
     } else {
       const { error } = await supabase.auth.signUp({

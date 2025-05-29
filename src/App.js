@@ -19,11 +19,16 @@ function AppLayout() {
         <div className="nav-container">
           <nav className="navbar">
             <Link to="/dashboard">Dashboard</Link>
-            <Link to="/invoice">Invoice</Link>
-            <Link to="/history">Order History</Link>
+            {
+            /*
+             comment to hide the links on the navbar
+            <Link to="/invoice">Invoice</Link> 
+            <Link to="/history">Order History</Link> 
             <Link to="/hold-bills">Bills On Hold</Link>
             <Link to="/report">Report</Link>
-            <Link to="/auth">Logout</Link>
+            */
+            }
+              <Link to="/auth">Logout</Link>
           </nav>
         </div>
       )}

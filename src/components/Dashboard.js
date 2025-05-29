@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import './Dashboard.css';
 import { supabase } from '../supabaseClient';
@@ -101,6 +102,15 @@ const Dashboard = ({ onNavigate }) => {
     }]
   };
 
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+  // Optional: clear auth tokens or session
+  // localStorage.removeItem('user');
+  navigate('/auth');
+};
+
+
   return (
     <div className="dashboard-container">
       <header style={{ textAlign: 'center', marginBottom: 30 }}>
@@ -200,6 +210,28 @@ const Dashboard = ({ onNavigate }) => {
           color: red;
           font-weight: bold;
         }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 0 20px;
+          }
+
+        .logout-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 8px 16px;
+        background-color:rgb(16, 53, 140);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        height: 40px;
+        z-index: 999;
+}
       `}</style>
     </div>
   );
