@@ -73,9 +73,23 @@ const Invoice = () => {
   const [billMeta, setBillMeta] = useState(null);
   const [existingBillId, setExistingBillId] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('');
+   const [selectedAddon, setSelectedAddon] = useState('');
+  const [selectedAddonPrice, setSelectedAddonPrice] = useState(0);
+
+  const addons = [
+    { name: '', price: 0 },
+    { name: 'Extra Cheese', price: 30 },
+    { name: 'Ice Cubes', price: 5 },
+    { name: 'Whipped Cream', price: 25 }
+  ];
+  const categories = [...new Set(itemsList.map(item => item.category))];
+  const filteredItems = selectedCategory ? itemsList.filter(item => item.category === selectedCategory) : [];
+
 
   const handleSelectItem = (e) => {
     setSelectedItemId(e.target.value);
+     setSelectedAddon('');
+    setSelectedAddonPrice(0);
     setSelectedQty('');
   };
 
@@ -94,7 +108,7 @@ const Invoice = () => {
   };
 
   const generateBill = async () => {
-    if (!name || !phone) return alert("Please fill customer details");
+    if (!name || !phone) return alert ("Please fill customer details");
     if (!tableNo) return alert("Please provide the table no.");
 
     const filtered = itemsList
@@ -108,12 +122,12 @@ const Invoice = () => {
 
     if (filtered.length === 0) return alert("Please select at least one item");
 
-    const subtotal = filtered.reduce((acc, item) => acc + item.amount, 0);
     const discountAmount = subtotal * (discount / 100);
-    const discountedSubtotal = subtotal - discountAmount;
-    const sgst = discountedSubtotal * 0.025;
-    const cgst = discountedSubtotal * 0.025;
-    const finalTotal = discountedSubtotal + sgst + cgst;
+const total = subtotal - discountAmount;
+const sgst = total * 0.025;
+const cgst = total * 0.025;
+const finalTotal = total + sgst + cgst;
+console.log({ subtotal, discountAmount, total, sgst, cgst, finalTotal });
 
     const billStatus = paymentMethod ? 'paid' : 'pending';
 
@@ -159,7 +173,7 @@ const Invoice = () => {
   const subtotal = selectedItems.reduce((acc, item) => acc + item.amount, 0);
   const sgst = subtotal * 0.025;
   const cgst = subtotal * 0.025;
-  const finalTotal = Math.max(0, subtotal + sgst + cgst - discount);
+  const finalTotal = Math.max(0, subtotal - (subtotal * (discount / 100)) + sgst + cgst);
 
   const downloadPDF = () => {
     const element = document.querySelector(".bill-output");
@@ -320,6 +334,22 @@ const Invoice = () => {
                 );
               })}
             </div>
+
+
+      {/* Addon Dropdown */}
+      <select value={selectedAddon} onChange={(e) => {
+        const addon = addons.find(a => a.name === e.target.value);
+        setSelectedAddon(addon.name);
+        setSelectedAddonPrice(addon.price);
+      }}>
+        {addons.map((addon, i) => (
+          <option key={i} value={addon.name}>
+            {addon.name ? `${addon.name} +₹${addon.price}` : 'Item Addon'}
+          </option>
+        ))}
+      </select>
+
+
           </div>
 
           <div className="form-section">
@@ -348,6 +378,7 @@ const Invoice = () => {
             <p>Date: {billMeta?.bill_date ? new Date(billMeta.bill_date).toLocaleString() : '-'}</p>
             <p>Table No: {tableNo}</p>
             <p>Payment Method: {paymentMethod || '-'}</p>
+          
             <table>
               <thead>
                 <tr><th>Item</th><th>Qty</th><th>Price</th><th>Amount</th></tr>
