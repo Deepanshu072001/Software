@@ -154,7 +154,8 @@ const itemsList = [
       {"id": 146, "name": "Roasted Almond Ice Cream", "Price": 80, "category": "Dessert" },
       {"id": 147, "name": "Ice Cream", "Price": 50, category:"Add Ons" },
       {"id": 148, "name": "Chocolate Syrup", "Price": 50, category:"Add Ons" },
-      {"id": 149, "name": "Whipping Cream", "Price": 50 , category:"Add Ons" }
+      {"id": 149, "name": "Extra Cheese", "Price": 50, category:"Add Ons" },
+      {"id": 150, "name": "Mugly Special", "Price": 650, "PriceSmall": 850, "PriceLarge": 1200, category:"Mugly Specials" }
  ];
   
 
