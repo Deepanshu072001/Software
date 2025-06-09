@@ -4,59 +4,159 @@ import { supabase } from '../supabaseClient';
 import './Invoice.css';
 import * as html2pdf from 'html2pdf.js';
 
-const itemsList = [
-   { "id": 1, "name": "Espresso", "category": "Beverage", "price": 100 },
-  { "id": 2, "name": "Cappuccino", "category": "Beverage", "price": 130 },
-  { "id": 3, "name": "Latte", "category": "Beverage", "price": 140 },
-  { "id": 4, "name": "Americano", "category": "Beverage", "price": 120 },
-  { "id": 5, "name": "Mocha", "category": "Beverage", "price": 150 },
-  { "id": 6, "name": "Cold Coffee", "category": "Beverage", "price": 160 },
-  { "id": 7, "name": "Iced Latte", "category": "Beverage", "price": 160 },
-  { "id": 8, "name": "Green Tea", "category": "Beverage", "price": 90 },
-  { "id": 9, "name": "Lemon Iced Tea", "category": "Beverage", "price": 100 },
-  { "id": 10, "name": "Hot Chocolate", "category": "Beverage", "price": 150 },
-  { "id": 11, "name": "Masala Chai", "category": "Beverage", "price": 80 },
-  { "id": 12, "name": "Herbal Tea", "category": "Beverage", "price": 90 },
-  { "id": 13, "name": "Filter Coffee", "category": "Beverage", "price": 70 },
-  { "id": 14, "name": "Veg Sandwich", "category": "Food", "price": 120 },
-  { "id": 15, "name": "Cheese Grilled Sandwich", "category": "Food", "price": 150 },
-  { "id": 16, "name": "Paneer Wrap", "category": "Food", "price": 160 },
-  { "id": 17, "name": "Chicken Wrap", "category": "Food", "price": 180 },
-  { "id": 18, "name": "French Fries", "category": "Food", "price": 100 },
-  { "id": 19, "name": "Peri Peri Fries", "category": "Food", "price": 120 },
-  { "id": 20, "name": "Garlic Bread", "category": "Food", "price": 90 },
-  { "id": 21, "name": "Cheesy Garlic Bread", "category": "Food", "price": 110 },
-  { "id": 22, "name": "Veg Burger", "category": "Food", "price": 120 },
-  { "id": 23, "name": "Chicken Burger", "category": "Food", "price": 150 },
-  { "id": 24, "name": "Veg Puff", "category": "Food", "price": 50 },
-  { "id": 25, "name": "Paneer Puff", "category": "Food", "price": 70 },
-  { "id": 26, "name": "Samosa (2 pcs)", "category": "Food", "price": 40 },
-  { "id": 27, "name": "Maggi Masala", "category": "Food", "price": 60 },
-  { "id": 28, "name": "Pasta - Red Sauce", "category": "Main Course", "price": 180 },
-  { "id": 29, "name": "Pasta - White Sauce", "category": "Main Course", "price": 180 },
-  { "id": 30, "name": "Pizza Margherita", "category": "Main Course", "price": 200 },
-  { "id": 31, "name": "Farmhouse Pizza", "category": "Main Course", "price": 250 },
-  { "id": 32, "name": "Paneer Tikka Pizza", "category": "Main Course", "price": 260 },
-  { "id": 33, "name": "Chicken Tandoori Pizza", "category": "Main Course", "price": 280 },
-  { "id": 34, "name": "Mac & Cheese", "category": "Main Course", "price": 190 },
-  { "id": 35, "name": "Club Sandwich", "category": "Main Course", "price": 170 },
-  { "id": 36, "name": "Chocolate Brownie", "category": "Dessert", "price": 90 },
-  { "id": 37, "name": "Choco Lava Cake", "category": "Dessert", "price": 110 },
-  { "id": 38, "name": "Vanilla Ice Cream", "category": "Dessert", "price": 70 },
-  { "id": 39, "name": "Chocolate Ice Cream", "category": "Dessert", "price": 80 },
-  { "id": 40, "name": "Strawberry Sundae", "category": "Dessert", "price": 120 },
-  { "id": 41, "name": "Muffin - Chocolate", "category": "Dessert", "price": 80 },
-  { "id": 42, "name": "Muffin - Blueberry", "category": "Dessert", "price": 85 },
-  { "id": 43, "name": "Donut - Glazed", "category": "Dessert", "price": 85 },
-  { "id": 44, "name": "Donut - Chocolate", "category": "Dessert", "price": 90 },
-  { "id": 45, "name": "Walnut Brownie", "category": "Dessert", "price": 100 },
-  { "id": 46, "name": "Oreo Shake", "category": "Special Drink", "price": 160 },
-  { "id": 47, "name": "KitKat Shake", "category": "Special Drink", "price": 170 },
-  { "id": 48, "name": "Strawberry Shake", "category": "Special Drink", "price": 150 },
-  { "id": 49, "name": "Mango Smoothie", "category": "Special Drink", "price": 150 },
-  { "id": 50, "name": "Banana Shake", "category": "Special Drink", "price": 140 }
 
-];
+const itemsList = [
+      {"id": 1, "name": "Espresso", "SmallPrice": 99, "LargePrice": 149, category:  "Hot Beverage" },
+      {"id": 2, "name": "Cappuccino", "SmallPrice": 160, "LargePrice": 180, category:  "Hot Beverage"},
+      {"id": 3, "name": "Café Latte", "SmallPrice": 160, "LargePrice": 180 , category:  "Hot Beverage"},
+      {"id": 4, "name": "Café Mocha", "SmallPrice": 175, "LargePrice": 0, category:  "Hot Beverage"},
+      {"id": 5, "name": "Americano", "SmallPrice": 149, "LargePrice": 0, category:  "Hot Beverage"},
+      {"id": 6, "name": "Irish Coffee", "SmallPrice": 160, "LargePrice": 0, category:  "Hot Beverage"},
+      {"id": 7, "name": "Masala Tea", "SmallPrice": 60, "LargePrice": 0, category:  "Hot Beverage"},
+      {"id": 8, "name": "Honey Ginger Lemon Tea", "SmallPrice": 60, "LargePrice": 0, category:  "Hot Beverage"},
+      {"id": 9, "name": "Green Tea", "SmallPrice": 60, "LargePrice": 0, category:  "Hot Beverage"},
+      {"id": 10, "name": "Hazelnut", "Price": 180 , category: "(Flavour Cappuccino/Latte)" },
+      {"id": 11, "name": "Vanilla", "Price": 180, category: "(Flavour Cappuccino/Latte)" },
+      {"id": 12, "name": "Irish", "Price": 180, category: "(Flavour Cappuccino/Latte)" },
+      {"id": 13, "name": "Caramel", "Price": 180 , category: "(Cappuccino/Latte)" },
+      {"id": 14, "name": "Red Velvet", "Price": 180, category: "(Cappuccino/Latte)" },
+      {"id": 15, "name": "Cinnamon", "Price": 180, category: "(Cappuccino/Latte)" },
+      {"id": 16, "name": "Butter Scotch", "Price": 180, category: "(Cappuccino/Latte)" },
+      {"id": 17, "name": "Classic Hot Chocolate", "Price": 180, category: "Hot Chocolate" },
+      {"id": 18, "name": "Hazelnut", "Price": 180 , category: "Hot Chocolate"},
+      {"id": 19, "name": "Vanilla", "Price": 180 , category: "Hot Chocolate"},
+      {"id": 20, "name": "Irish", "Price": 180 , category: "Hot Chocolate"},
+      {"id": 21, "name": "Caramel", "Price": 180, category: "Hot Chocolate" },
+      {"id": 22, "name": "Red Velvet", "Price": 180, category: "Hot Chocolate" },
+      {"id": 23, "name": "Cinnamon", "Price": 180, category: "Hot Chocolate" },
+      {"id": 24, "name": "Butter Scotch", "Price": 180 , category: "Hot Chocolate"},
+      {"id": 25, "name": "Ice Americano", "Price": 149 , category: "Cold Beverage" },
+      {"id": 26, "name": "Ice Latte", "Price": 160, category: "Cold Brew" },
+      {"id": 27, "name": "Café Frappe", "Price": 160 , category: "Cold Brews" },
+      {"id": 28, "name": "Hazelnut", "Price": 180, category: "Cold Brews" },
+      {"id": 29, "name": "Hazelnut", "Price": 180 , category: "Cold Brews" },    
+      {"id": 30, "name": "Vanilla", "Price": 180 , category:   "Cold Brews" },
+      {"id": 31, "name": "Irish", "Price": 180, category: "Cold Brews" },
+      {"id": 32, "name": "Caramel", "Price": 180, category: "Cold Brews" },
+      {"id": 33, "name": "Red Velvet", "Price": 180, category: "Cold Brews" },
+      {"id": 34, "name": "Cinnamon", "Price": 180, category: "Cold Brews" },
+      {"id": 35, "name": "Butter Scotch", "Price": 180, category: "Cold Brews"},
+      {"id": 36, "name": "Blue Lagoon", "Price": 180 , category: "Mocktails" },
+      {"id": 37, "name": "Mint Mojito", "Price": 180 , category: "Mocktails" },
+      {"id": 38, "name": "Peach", "Price": 180, category: "Mocktails" },
+      {"id": 39, "name": "Green Apple", "Price": 180, category: "Mocktails" },
+      {"id": 40, "name": "Cranberry Watermelon", "Price": 180, category: "Mocktails" },
+      {"id": 41, "name": "Spice Orange Peach", "Price": 180, category: "Mocktails" },
+      {"id": 42, "name": "Fruit Punch", "Price": 180, category: "Mocktails" },
+      {"id": 43, "name": "Blue Ocean", "Price": 180 , category: "Mocktails" },
+      {"id": 44, "name": "Lemon", "Price": 149,category: "Ice Tea" },
+      {"id": 45, "name": "Peach", "Price": 149, category: "Ice Tea" },
+      {"id": 46, "name": "Watermelon", "Price": 149, category: "Ice Tea" },
+      {"id": 47, "name": "Cucumber", "Price": 149, category: "Ice Tea" },
+      {"id": 48, "name": "Cranberry", "Price": 149 , category: "Ice Tea" },
+      {"id": 49, "name": "Fresh Lime Water", "Price": 140 , category: "Lemonades"},
+      {"id": 50, "name": "Fresh Lime Soda", "Price": 140 , category: "Lemonades"},
+      {"id": 51, "name": "Mugly Shikanji", "Price": 140 , category: "Lemonades"},
+      {"id": 52, "name": "Pink Lemonade", "Price": 140 , category: "Lemonades"},
+      {"id": 53, "name": "Chatpata Jamun", "Price": 140 , category: "Lemonades"},
+      {"id": 54, "name": "Soft Drink", "Price": 60, category: "Other Drinks"},
+      {"id": 55, "name": "Red Bull", "Price": 140 , category: "Other Drinks"},
+      {"id": 56, "name": "Mugly Crush", "Price": 160, category: "Other Drinks"},
+      {"id": 57, "name": "MixBerry Green Apple",  "Price": 160, category: "Mugly Crush"},
+      {"id": 58, "name": "Strawberry Mango", "Price": 160, category: "Mugly Crush"},
+      {"id": 59, "name": "Mango", "Price": 160, category: "Mugly Crush"},
+      {"id": 60, "name": "Blue Ocin Mojito", "Price": 160, category: "Mugly Crush"},
+      {"id": 61, "name": "Wallnut Browanie", "Price": 190, category:"Shakes" },
+      {"id": 62, "name": "Oreao", "Price": 190, category:"Shakes" },
+      {"id": 63, "name": "Kitkat", "Price": 190, category:"Shakes" },
+      {"id": 64, "name": "Red Velvet", "Price": 190 , category: "Shakes" },
+      {"id": 65, "name": "Mango Colada", "Price": 190 , category:" Shakes" },
+      {"id": 66, "name": "Berry Blast", "Price": 190 , category: "Shakes" },
+      {"id": 67, "name": "Strawberry Red Velvet Oreo", "Price": 190, category:"Shakes" },
+      {"id": 68, "name": "Butter Scotch Oreo", "Price": 190, category:"Shakes" },
+      {"id": 69, "name": "Butter Scotch", "Price": 190, category:"Shakes" },
+      {"id": 70, "name": "Mugly Chocolate", "Price": 190 , category:"Shakes" },
+      {"id": 71, "name": "Chocolate Oreo", "Price": 190, category:"Shakes" },
+      {"id": 72, "name": "Mango Shake", "Price": 190, category:"Shakes" },
+      {"id": 73, "name": "Garlic Bread", "Price": 149, "category": "SIDERS" },
+      {"id": 74, "name": "Cheese Garlic Bread", "Price": 180, "category": "SIDERS" },
+      {"id": 75, "name": "Cheese Chilli Toast", "Price": 180, "category": "SIDERS" },
+      {"id": 76, "name": "French Fries", "Price": 160, "category": "SIDERS" },
+      {"id": 77, "name": "Perry Perry Fries", "Price": 170, "category": "SIDERS" },
+      {"id": 78, "name": "Cheese Loaded Fries", "Price": 180, "category": "SIDERS" },
+      {"id": 79, "name": "Onion Wings", "Price": 175, "category": "SIDERS" },
+      {"id": 80, "name": "Spaghetti Aglio Olio Pasta", "SmallPrice": 280, "LargePrice": 325, "category": "PASTA", "Notes": "Served With Garlic Bread, Veg/Non Veg" },
+      {"id": 81, "name": "Cheese Sauce Pasta", "SmallPrice": 280, "LargePrice": 325, "category": "PASTA", "Notes": "Served With Garlic Bread, Veg/Non Veg" },
+      {"id": 82, "name": "Arrabiata", "SmallPrice": 280, "LargePrice": 325, "category": "PASTA", "Notes": "Served With Garlic Bread, Veg/Non Veg" },
+      {"id": 83, "name": "Pink Penny Pasta", "SmallPrice": 280, "LargePrice": 325, "category": "PASTA", "Notes": "Served With Garlic Bread, Veg/Non Veg" },
+      {"id": 84, "name": "Extra Topping", "Price": 50, "category": "PASTA", "Options": ["Cheese", "Vegetable", "Chicken", "Jalepino"]},
+      {"id": 85, "name": "Garlic Delight", "Price": 300, "category": "Pizza" },
+      {"id": 86, "name": "Margarita Classic", "Price": 280, "category": "Pizza" },
+      {"id": 87, "name": "Vegetable American", "Price": 300, "category": "Pizza" },
+      {"id": 88, "name": "Oyster Mushroom", "Price": 300, "category": "Pizza" },
+      {"id": 89, "name": "Taka Tak Paneer", "Price": 320, "category": "Pizza" },
+      {"id": 90, "name": "Chicken Pizza", "Price": 350, "category": "Pizza" },
+      {"id": 91, "name": "Paneer Sandwich", "Price": 180, "category": "Sandwiches", "Type": "Veg" },
+      {"id": 92, "name": "Club Sandwich", "SmallPrice": 180, "LargePrice": 220, "category": "Sandwiches", "Type": "Non Veg" },
+      {"id": 93, "name": "BBQ Sandwich", "SmallPrice": 180, "LargePrice": 220, "category": "Sandwiches", "Type": "Non Veg" },
+      {"id": 94, "name": "Vegetable Sandwich", "Price": 170, "category": "Sandwiches", "Type": "Veg" },
+      {"id": 95, "name": "Veg Burger", "Price": 150, "category": "Burger", "Type": "Veg" },
+      {"id": 96, "name": "Paneer Burger", "Price": 170, "category": "Burger", "Type": "Veg" },
+      {"id": 97, "name": "Mushroom Burger", "Price": 170, "category": "Burger", "Type": "Veg" },
+      {"id": 98, "name": "Chicken Burger", "Price": 199, "category": "Burger", "Type": "Non Veg" },
+      {"id": 99, "name": "Mugly Chicken Breast Burger", "Price": 199, "category": "Burger", "Type": "Non Veg" },
+      {"id": 100, "name": "Veg Momos (Steam/Pan Fried/Kurkure/Chilli)", "Price": 180, "category": "Momos", "Type": "Veg", "Quantity": "8 Pc" },
+      {"id": 101, "name": "Cheese Momos (Steam/Pan Fried/Kurkure/Chilli)", "Price": 180, "category": "Momos", "Type": "Veg", "Quantity": "8 Pc" },
+      {"id": 102, "name": "Chicken Momos (Steam/Pan Fried/Kurkure/Chilli)", "Price": 220, "category": "Momos", "Type": "Non Veg", "Quantity": "8 Pc" },
+      {"id": 103, "name": "Hakka Noodles", "SmallPrice": 240, "LargePrice": 299, "category": "Noodles", "Type": "Veg" },
+      {"id": 104, "name": "Chilli Garlic Noodles", "SmallPrice": 240, "LargePrice": 299, "category": "Noodles", "Type": "Veg" },
+      {"id": 105, "name": "Shezwan Noodles", "SmallPrice": 240, "LargePrice": 299, "category": "Noodles", "Type": "Veg" },
+      {"id": 106, "name": "Bron Garlic Noodles", "SmallPrice": 240, "LargePrice": 299, "category": "Noodles", "Type": "Non Veg" },
+      {"id": 107, "name": "Veg Fried Rice", "SmallPrice": 180, "LargePrice": 220, "category": "Fried Rice", "Type": "Veg" },
+      {"id": 108, "name": "Shezwan Fried Rice", "SmallPrice": 180, "LargePrice": 220, "category": "Fried Rice", "Type": "Veg" },
+      {"id": 109, "name": "Bron Garlic Fried Rice", "SmallPrice": 180, "LargePrice": 220, "category": "Fried Rice", "Type": "Non Veg" },
+      {"id": 110, "name": "Egg Fried Rice", "Price": 199, "category": "Fried Rice", "Type": "Non Veg" },
+      {"id": 111, "name": "Triple Fried Rice", "Price": 199, "category": "Fried Rice", "Type": "Non Veg" },
+      {"id": 112, "name": "Veg Sizzler (Serve With Rice Noodles)", "Price": 299, "category": "Sizzler", "Type": "Veg" },
+      {"id": 113, "name": "Paneer Sizzler (Serve With Rice Noodles)", "Price": 350, "category": "Sizzler", "Type": "Veg" },
+      {"id": 114, "name": "Chicken Sizzler (Serve With Rice Noodles)", "Price": 399, "category": "Sizzler", "Type": "Non Veg" },
+      {"id": 115, "name": "Chilli Panner (Dry/Gravy)", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 116, "name": "Chilli Mushroom", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 117, "name": "Chilli Baby Corn", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 118, "name": "Honey Chilli Potato", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 119, "name": "Crispy Corn", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 120, "name": "Spring Roll", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 121, "name": "Crispy Veg", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 122, "name": "Panner 65", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 123, "name": "Cigar Roll", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 124, "name": "Lotus Steam", "Price": 250, "category": "Chinese Snacks", "Type": "Veg" },
+      {"id": 125, "name": "Chilli Chicken (Dry/Gravy)", "Price": 299, "category": "Chinese Snacks", "Type": "Non Veg" },
+      {"id": 126, "name": "Manchurian (Dry/Gravy)", "Price": 299, "category": "Chinese Snacks", "Type": "Non Veg" },
+      {"id": 127, "name": "Chicken Manchurian", "Price": 299, "category": "Chinese Snacks", "Type": "Non Veg" },
+      {"id": 128, "name": "Chicken Black Pepper", "Price": 299, "category": "Chinese Snacks", "Type": "Non Veg" },
+      {"id": 129, "name": "Chicken Lollypop", "Price": 299, "category": "Chinese Snacks", "Type": "Non Veg" },
+      {"id": 130, "name": "Chicken Wings", "Price": 299, "category": "Chinese Snacks", "Type": "Non Veg" },
+      {"id": 131, "name": "Veg Chinese Platter (4 pc Each)", "Price": 350, "category": "Chinese Platter", "Type": "Veg", "Includes": ["Chilli Paneer", "Spring Roll", "Manchurian"] },
+      {"id": 132, "name": "Non Veg Chinese Platter (4 pc Each)", "Price": 399, "category": "Chinese Platter", "Type": "Non Veg", "Includes": ["Chilli Chicken", "Chicken Lollypop", "Chicken Black Pepper"] },
+      {"id": 133, "name": "Combos Noodles / Fried Rice", "SmallPrice": 199, "LargePrice": 220, "category": "Combos", "Includes": ["Chilli Paneer", "Manchurian", "Chilli Chicken"] },
+      {"id": 134, "name": "Seasar Salad", "PriceSmall": 175, "PriceLarge": 220, "category": "Salad", "Type": "Veg" },
+      {"id": 135, "name": "Greek Salad", "PriceSmall": 175, "PriceLarge": 220, "category": "Salad", "Type": "Veg" },
+      {"id": 136, "name": "Green Salad", "PriceSmall": 175, "PriceLarge": 220, "category": "Salad", "Type": "Veg" },
+      {"id": 137, "name": "Brownie With Hot Chocolate", "Price": 140, "category": "Dessert" },
+      {"id": 138, "name": "Brownie With Ice Cream", "Price": 170, "category": "Dessert" },
+      {"id": 139, "name": "Sizzling Brownie", "Price": 190, "category": "Dessert" },
+      {"id": 140, "name": "Blue Berry Cheese Cake", "Price": 80, "category": "Dessert" },
+      {"id": 141, "name": "Red Velvet Cheese Cake", "Price": 80, "category": "Dessert" },
+      {"id": 142, "name": "Chocolate Truffle", "Price": 80, "category": "Dessert" },
+      {"id": 143, "name": "Vanilla Ice Cream", "Price": 80, "category": "Dessert" },
+      {"id": 144, "name": "American Nuts Cream", "Price": 80, "category": "Dessert" },
+      {"id": 145, "name": "Chocolate Cream", "Price": 80, "category": "Dessert" },
+      {"id": 146, "name": "Roasted Almond Ice Cream", "Price": 80, "category": "Dessert" },
+      {"id": 147, "name": "Ice Cream", "Price": 50, category:"Add Ons" },
+      {"id": 148, "name": "Chocolate Syrup", "Price": 50, category:"Add Ons" },
+      {"id": 149, "name": "Whipping Cream", "Price": 50 , category:"Add Ons" }
+ ];
+  
 
 const Invoice = () => {
   const navigate = useNavigate();
@@ -73,23 +173,9 @@ const Invoice = () => {
   const [billMeta, setBillMeta] = useState(null);
   const [existingBillId, setExistingBillId] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('');
-   const [selectedAddon, setSelectedAddon] = useState('');
-  const [selectedAddonPrice, setSelectedAddonPrice] = useState(0);
-
-  const addons = [
-    { name: '', price: 0 },
-    { name: 'Extra Cheese', price: 30 },
-    { name: 'Ice Cubes', price: 5 },
-    { name: 'Whipped Cream', price: 25 }
-  ];
-  const categories = [...new Set(itemsList.map(item => item.category))];
-  const filteredItems = selectedCategory ? itemsList.filter(item => item.category === selectedCategory) : [];
-
 
   const handleSelectItem = (e) => {
     setSelectedItemId(e.target.value);
-     setSelectedAddon('');
-    setSelectedAddonPrice(0);
     setSelectedQty('');
   };
 
@@ -108,26 +194,35 @@ const Invoice = () => {
   };
 
   const generateBill = async () => {
-    if (!name || !phone) return alert ("Please fill customer details");
+    if (!name || !phone) return alert("Please fill customer details");
     if (!tableNo) return alert("Please provide the table no.");
 
     const filtered = itemsList
       .filter(item => itemIdToQty[item.id] > 0)
-      .map(item => ({
-        item_name: item.name,
-        quantity: itemIdToQty[item.id],
-        price: item.price,
-        amount: item.price * itemIdToQty[item.id],
-      }));
+      .map(item => {
+        const price = Number(
+          item.Price ??
+          item.SmallPrice ??
+          item.LargePrice ??
+          0
+        );
+
+        return {
+          item_name: item.name,
+          quantity: itemIdToQty[item.id],
+          price: price,
+          amount: price * itemIdToQty[item.id],
+        };
+      });
 
     if (filtered.length === 0) return alert("Please select at least one item");
 
+    const subtotal = filtered.reduce((acc, item) => acc + item.amount, 0);
     const discountAmount = subtotal * (discount / 100);
-const total = subtotal - discountAmount;
-const sgst = total * 0.025;
-const cgst = total * 0.025;
-const finalTotal = total + sgst + cgst;
-console.log({ subtotal, discountAmount, total, sgst, cgst, finalTotal });
+    const discountedSubtotal = subtotal - discountAmount;
+    const sgst = discountedSubtotal * 0.025;
+    const cgst = discountedSubtotal * 0.025;
+    const finalTotal = discountedSubtotal + sgst + cgst;
 
     const billStatus = paymentMethod ? 'paid' : 'pending';
 
@@ -173,7 +268,7 @@ console.log({ subtotal, discountAmount, total, sgst, cgst, finalTotal });
   const subtotal = selectedItems.reduce((acc, item) => acc + item.amount, 0);
   const sgst = subtotal * 0.025;
   const cgst = subtotal * 0.025;
-  const finalTotal = Math.max(0, subtotal - (subtotal * (discount / 100)) + sgst + cgst);
+  const finalTotal = Math.max(0, subtotal -(subtotal*(discount/100)) + sgst + cgst);
 
   const downloadPDF = () => {
     const element = document.querySelector(".bill-output");
@@ -305,52 +400,47 @@ console.log({ subtotal, discountAmount, total, sgst, cgst, finalTotal });
               </select>
             </div>
 
-            <div className="selected-items">
-              {Object.entries(itemIdToQty).map(([id, qty]) => {
-                const item = itemsList.find(i => i.id === parseInt(id));
-                return (
-                  <div key={id} className="item-row">
-                    <span>{item.name}</span>
-                    <span>
-                      Qty: {qty}
-                      <button onClick={() => {
-                        setItemIdToQty(prev => ({
-                          ...prev,
-                          [id]: prev[id] + 1
-                        }));
-                      }}>+</button>
-                      <button onClick={() => {
-                        setItemIdToQty(prev => {
-                          const newQty = prev[id] - 1;
-                          if (newQty <= 0) {
-                            const { [id]: _, ...rest } = prev;
-                            return rest;
-                          }
-                          return { ...prev, [id]: newQty };
-                        });
-                      }}>-</button>
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="selected-items">
+            {Object.entries(itemIdToQty).map(([id, qty]) => {
+              const item = itemsList.find(i => i.id === parseInt(id));
+              if (!item) return null;
 
+               // Handle fallback for missing price fields safely
+                const getItemPrice = (item) => Number(item.Price ?? item.SmallPrice ?? item.LargePrice ?? 0);
 
-      {/* Addon Dropdown */}
-      <select value={selectedAddon} onChange={(e) => {
-        const addon = addons.find(a => a.name === e.target.value);
-        setSelectedAddon(addon.name);
-        setSelectedAddonPrice(addon.price);
-      }}>
-        {addons.map((addon, i) => (
-          <option key={i} value={addon.name}>
-            {addon.name ? `${addon.name} +₹${addon.price}` : 'Item Addon'}
-          </option>
-        ))}
-      </select>
+              const price = parseInt(getItemPrice(item));
+              const itemTotal = price * qty;
 
-
+              return (
+                <div key={id} className="item-row">
+                  <span>{item.name}</span>
+                  <span>Qty: {qty}</span>
+                  <span>Price: ₹{price}</span>
+                  <span>Total: ₹{itemTotal}</span>
+                  <span>
+                    <button onClick={() => {
+                      setItemIdToQty(prev => ({
+                        ...prev,
+                        [id]: prev[id] + 1
+                      }));
+                    }}>+</button>
+                    <button onClick={() => {
+                      setItemIdToQty(prev => {
+                        const newQty = prev[id] - 1;
+                        if (newQty <= 0) {
+                          const { [id]: _, ...rest } = prev;
+                          return rest;
+                        }
+                        return { ...prev, [id]: newQty };
+                      });
+                    }}>-</button>
+                  </span>
+                </div>
+              );
+            })}
           </div>
+
+        </div>
 
           <div className="form-section">
             <label>Table No:
@@ -378,7 +468,6 @@ console.log({ subtotal, discountAmount, total, sgst, cgst, finalTotal });
             <p>Date: {billMeta?.bill_date ? new Date(billMeta.bill_date).toLocaleString() : '-'}</p>
             <p>Table No: {tableNo}</p>
             <p>Payment Method: {paymentMethod || '-'}</p>
-          
             <table>
               <thead>
                 <tr><th>Item</th><th>Qty</th><th>Price</th><th>Amount</th></tr>

@@ -28,6 +28,8 @@ const Dashboard = ({ onNavigate }) => {
   });
   const [currentTime, setCurrentTime] = useState(new Date());
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchStats();
     const interval = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -39,7 +41,7 @@ const Dashboard = ({ onNavigate }) => {
     if (error) return;
 
     const totalOrders = data.length;
-    const totalRevenue = data.reduce((sum, d) => sum + d.total, 0);
+    const totalRevenue = data.reduce((sum, d) => sum + (d.total || 0), 0);
     const paidBills = data.filter(d => d.status === 'paid').length;
     const pendingBills = data.filter(d => d.status !== 'paid').length;
 
@@ -48,10 +50,12 @@ const Dashboard = ({ onNavigate }) => {
 
     data.forEach(d => {
       const method = d.payment_method || 'Unknown';
-      paymentStats[method] = (paymentStats[method] || 0) + d.total;
+      paymentStats[method] = (paymentStats[method] || 0) + (d.total || 0);
 
-      d.items?.forEach(item => {
-        itemMap[item.item_name] = (itemMap[item.item_name] || 0) + item.quantity;
+      (d.items || []).forEach(item => {
+        if (item?.item_name && item?.quantity) {
+          itemMap[item.item_name] = (itemMap[item.item_name] || 0) + item.quantity;
+        }
       });
     });
 
@@ -75,6 +79,12 @@ const Dashboard = ({ onNavigate }) => {
     });
   };
 
+  const handleLogout = () => {
+    // Clear auth tokens if needed
+    // localStorage.removeItem('user');
+    navigate('/auth');
+  };
+
   const summaryCards = [
     { label: "Total Orders", value: stats.totalOrders },
     { label: "Total Revenue", value: `₹${stats.totalRevenue.toFixed(2)}` },
@@ -84,13 +94,11 @@ const Dashboard = ({ onNavigate }) => {
 
   const barData = {
     labels: stats.itemSales.map(i => i.label),
-    datasets: [
-      {
-        label: 'Top Selling Items',
-        data: stats.itemSales.map(i => i.qty),
-        backgroundColor: '#3498db',
-      }
-    ]
+    datasets: [{
+      label: 'Top Selling Items',
+      data: stats.itemSales.map(i => i.qty),
+      backgroundColor: '#3498db',
+    }]
   };
 
   const pieData = {
@@ -102,22 +110,14 @@ const Dashboard = ({ onNavigate }) => {
     }]
   };
 
-  const navigate = useNavigate();
-
-const handleLogout = () => {
-  // Optional: clear auth tokens or session
-  // localStorage.removeItem('user');
-  navigate('/auth');
-};
-
-
   return (
     <div className="dashboard-container">
+      <button className="logout-button" onClick={handleLogout}>Logout</button>
+
       <header style={{ textAlign: 'center', marginBottom: 30 }}>
         <h1>Welcome to MuglyCafe Dashboard</h1>
-        <h2>Current Time: {currentTime.toLocaleTimeString()}</h2>
-        <h3> @Powered by PS Paper Tech Solution</h3>
-
+        <h2>Current Time: {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</h2>
+        <h3>@Powered by PS Paper Tech Solution</h3>
       </header>
 
       <div className="summary-grid">
@@ -161,11 +161,11 @@ const handleLogout = () => {
         <ul>
           {stats.recentOrders.map((order, i) => (
             <li key={i}>
-              <span><strong>#{order.bill_no}</strong></span>
-              <span>{new Date(order.bill_date).toLocaleString()}</span>
-              <span>₹{order.total.toFixed(2)}</span>
+              <span><strong>#{order.bill_no || 'N/A'}</strong></span>
+              <span>{order.bill_date ? new Date(order.bill_date).toLocaleString() : 'No Date'}</span>
+              <span>₹{(order.total || 0).toFixed(2)}</span>
               <span className={order.status === 'paid' ? 'status-paid' : 'status-pending'}>
-                {order.status}
+                {order.status || 'unknown'}
               </span>
             </li>
           ))}
@@ -210,28 +210,19 @@ const handleLogout = () => {
           color: red;
           font-weight: bold;
         }
-
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 30px;
-            padding: 0 20px;
-          }
-
         .logout-button {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        padding: 8px 16px;
-        background-color:rgb(16, 53, 140);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        height: 40px;
-        z-index: 999;
-}
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          padding: 8px 16px;
+          background-color: rgb(16, 53, 140);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          height: 40px;
+          z-index: 999;
+        }
       `}</style>
     </div>
   );
